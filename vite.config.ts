@@ -12,6 +12,28 @@ export default defineConfig(({ mode }) => {
         alias: {
           '@': path.resolve(__dirname, '.'),
         }
+      },
+      server: {
+        host: true,
+        port: 5173,
+        hmr: {
+          overlay: false
+        }
+      },
+      build: {
+        target: 'esnext',
+        minify: 'terser',
+        rollupOptions: {
+          output: {
+            manualChunks: {
+              vendor: ['react', 'react-dom'],
+              backendless: ['backendless']
+            }
+          }
+        }
+      },
+      optimizeDeps: {
+        include: ['react', 'react-dom', 'backendless']
       }
     };
 });

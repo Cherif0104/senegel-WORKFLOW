@@ -1,6 +1,6 @@
 
 
-export type Role = 'student' | 'employer' | 'super_administrator' | 'administrator' | 'manager' | 'supervisor' | 'editor' | 'entrepreneur' | 'funder' | 'mentor' | 'intern' | 'trainer' | 'implementer' | 'coach' | 'facilitator' | 'publisher' | 'producer' | 'artist' | 'alumni';
+export type Role = 'admin' | 'formateur' | 'apprenant' | 'super_administrator' | 'administrator' | 'manager' | 'supervisor' | 'editor' | 'entrepreneur' | 'funder' | 'mentor' | 'intern' | 'trainer' | 'implementer' | 'coach' | 'facilitator' | 'publisher' | 'producer' | 'artist' | 'alumni';
 
 export interface User {
   id: number;

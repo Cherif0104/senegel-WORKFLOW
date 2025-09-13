@@ -1,13 +1,14 @@
 import { GoogleGenAI, Modality } from "@google/genai";
 import { Project, Task, User, Contact } from '../types';
 
-const API_KEY = process.env.API_KEY;
+const API_KEY = process.env.API_KEY || import.meta.env.VITE_GEMINI_API_KEY;
 
 if (!API_KEY) {
-  console.warn("Gemini API key not found. Please set the API_KEY environment variable.");
+  console.warn("Gemini API key not found. Please set the VITE_GEMINI_API_KEY environment variable.");
 }
 
-const ai = new GoogleGenAI({ apiKey: API_KEY! });
+// Only initialize AI if we have an API key
+const ai = API_KEY ? new GoogleGenAI({ apiKey: API_KEY }) : null;
 
 // --- Existing Functions ---
 
@@ -23,6 +24,7 @@ export const runAICoach = async (prompt: string): Promise<string> => {
   }
 
   try {
+    if (!ai) throw new Error("AI not initialized");
     const response = await ai.models.generateContent({
         model: 'gemini-2.5-flash',
         contents: prompt,
@@ -44,6 +46,7 @@ export const generateImage = async (prompt: string): Promise<string> => {
     }
 
     try {
+        if (!ai) throw new Error("AI not initialized");
         const response = await ai.models.generateImages({
             model: 'imagen-4.0-generate-001',
             prompt: prompt,
@@ -69,6 +72,7 @@ export const editImage = async (base64Image: string, mimeType: string, prompt: s
         };
     }
     try {
+        if (!ai) throw new Error("AI not initialized");
         const response = await ai.models.generateContent({
             model: 'gemini-2.5-flash-image-preview',
             contents: {
@@ -384,6 +388,7 @@ export const runAIAgent = async (prompt: string, context: string): Promise<strin
     }
     
     try {
+        if (!ai) throw new Error("AI not initialized");
         const response = await ai.models.generateContent({
             model: 'gemini-2.5-flash',
             contents: prompt,
@@ -407,6 +412,7 @@ export const runAuthAIAssistant = async (prompt: string): Promise<string> => {
     }
 
     try {
+        if (!ai) throw new Error("AI not initialized");
         const response = await ai.models.generateContent({
             model: 'gemini-2.5-flash',
             contents: prompt,

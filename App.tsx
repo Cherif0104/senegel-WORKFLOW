@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from './contexts/AuthContext';
 import { mockCourses, mockJobs, mockProjects, mockGoals, mockContacts, mockDocuments, mockAllUsers, mockTimeLogs, mockLeaveRequests, mockInvoices, mockExpenses, mockRecurringInvoices, mockRecurringExpenses, mockBudgets, mockMeetings } from './constants/data';
+import { authService, projectService, courseService } from './services/backendlessService';
 import { Course, Job, Project, Objective, Contact, Document, User, Role, TimeLog, LeaveRequest, Invoice, Expense, AppNotification, RecurringInvoice, RecurringExpense, RecurrenceFrequency, Budget, Meeting } from './types';
 import { useLocalization } from './contexts/LocalizationContext';
 
@@ -9,6 +10,7 @@ import Signup from './components/Signup';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 import Dashboard from './components/Dashboard';
+import SenegelDashboard from './components/SenegelDashboard';
 import Courses from './components/Courses';
 import Jobs from './components/Jobs';
 import AICoach from './components/AICoach';
@@ -170,16 +172,51 @@ const App: React.FC = () => {
 
   }, [invoices, expenses, reminderDays, t]);
 
-  // --- Signup Handler ---
-  const handleUserSignup = (signupData: Omit<User, 'id' | 'avatar' | 'skills'>) => {
-    const newUser: User = {
-      id: Date.now(),
-      ...signupData,
-      avatar: `https://picsum.photos/seed/${Date.now()}/100/100`,
-      skills: [],
-    };
-    setUsers(prev => [...prev, newUser]);
-    login(newUser);
+  // --- Signup Handler avec Backendless ---
+  const handleUserSignup = async (signupData: Omit<User, 'id' | 'avatar' | 'skills'>) => {
+    try {
+      // Inscription dans Backendless
+      const result = await authService.register({
+        email: signupData.email,
+        password: signupData.password || 'defaultPassword123',
+        name: signupData.name,
+        role: signupData.role,
+        skills: []
+      });
+
+      if (result.success) {
+        const newUser: User = {
+          id: Date.now(),
+          ...signupData,
+          avatar: `https://picsum.photos/seed/${Date.now()}/100/100`,
+          skills: [],
+        };
+        setUsers(prev => [...prev, newUser]);
+        login(newUser);
+      } else {
+        console.error('Erreur inscription Backendless:', result.error);
+        // Fallback sur l'inscription locale
+        const newUser: User = {
+          id: Date.now(),
+          ...signupData,
+          avatar: `https://picsum.photos/seed/${Date.now()}/100/100`,
+          skills: [],
+        };
+        setUsers(prev => [...prev, newUser]);
+        login(newUser);
+      }
+    } catch (error) {
+      console.error('Erreur inscription:', error);
+      // Fallback sur l'inscription locale
+      const newUser: User = {
+        id: Date.now(),
+        ...signupData,
+        avatar: `https://picsum.photos/seed/${Date.now()}/100/100`,
+        skills: [],
+      };
+      setUsers(prev => [...prev, newUser]);
+      login(newUser);
+    }
   };
 
   if (!user) {
@@ -416,7 +453,7 @@ const App: React.FC = () => {
   const renderView = () => {
     switch (currentView) {
       case 'dashboard':
-        return <Dashboard setView={handleSetView} projects={projects} courses={courses} jobs={jobs} timeLogs={timeLogs} leaveRequests={leaveRequests} invoices={invoices} expenses={expenses} />;
+        return <SenegelDashboard setView={handleSetView} projects={projects} courses={courses} users={users} timeLogs={timeLogs} leaveRequests={leaveRequests} invoices={invoices} expenses={expenses} />;
       case 'time_tracking':
         return <TimeTracking 
                     timeLogs={timeLogs} 
@@ -516,7 +553,7 @@ const App: React.FC = () => {
       case 'settings':
         return <Settings reminderDays={reminderDays} onSetReminderDays={setReminderDays} />;
       default:
-        return <Dashboard setView={handleSetView} projects={projects} courses={courses} jobs={jobs} timeLogs={timeLogs} leaveRequests={leaveRequests} invoices={invoices} expenses={expenses}/>;
+        return <SenegelDashboard setView={handleSetView} projects={projects} courses={courses} users={users} timeLogs={timeLogs} leaveRequests={leaveRequests} invoices={invoices} expenses={expenses}/>;
     }
   };
   

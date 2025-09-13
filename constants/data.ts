@@ -1,58 +1,66 @@
 import { User, Course, Job, Project, Task, Contact, Document, Objective, TimeLog, LeaveRequest, Invoice, Expense, RecurringInvoice, RecurringExpense, Budget, Meeting } from '../types';
 
 export const mockUsers: { [key: string]: User } = {
-  student: {
+  admin: {
     id: 1,
-    name: "Amina Diop",
-    email: "amina.diop@example.com",
-    avatar: "https://picsum.photos/seed/student/100/100",
-    role: 'student',
-    skills: ["Digital Marketing", "Community Management", "Content Creation"],
+    name: "Fatou N'diaye",
+    email: "fatou.ndiaye@senegel.org",
+    avatar: "https://picsum.photos/seed/admin/100/100",
+    role: 'admin',
+    skills: ["System Administration", "Data Analysis", "Strategic Planning"],
   },
-  employer: {
+  formateur: {
     id: 2,
     name: "Moussa Faye",
-    email: "moussa.faye@example.com",
-    avatar: "https://picsum.photos/seed/employer/100/100",
-    role: 'employer',
-    skills: ["Team Leadership", "Recruitment", "Financial Planning"],
+    email: "moussa.faye@senegel.org",
+    avatar: "https://picsum.photos/seed/formateur/100/100",
+    role: 'formateur',
+    skills: ["Formation", "Pédagogie", "Gestion de Projets"],
+  },
+  apprenant: {
+    id: 3,
+    name: "Amina Diop",
+    email: "amina.diop@senegel.org",
+    avatar: "https://picsum.photos/seed/apprenant/100/100",
+    role: 'apprenant',
+    skills: ["Digital Marketing", "Community Management", "Content Creation"],
   },
   super_administrator: {
-    id: 3,
-    name: "Fatou N'diaye",
-    email: "fatou.ndiaye@senegelworkflow.org",
-    avatar: "https://picsum.photos/seed/admin/100/100",
+    id: 4,
+    name: "Administrateur SENEGEL",
+    email: "admin@senegel.org",
+    avatar: "https://picsum.photos/seed/superadmin/100/100",
     role: 'super_administrator',
     skills: ["System Administration", "Data Analysis", "Strategic Planning"],
   },
    student2: {
-    id: 4,
+    id: 5,
     name: 'Binta Fall',
-    email: 'binta.fall@example.com',
+    email: 'binta.fall@senegel.org',
     avatar: 'https://picsum.photos/seed/student2/100/100',
-    role: 'student',
+    role: 'apprenant',
     skills: ['Graphic Design', 'UI/UX', 'Figma', 'Adobe Suite']
   },
   student3: {
-    id: 5,
+    id: 6,
     name: 'Cheikh Sarr',
-    email: 'cheikh.sarr@example.com',
+    email: 'cheikh.sarr@senegel.org',
     avatar: 'https://picsum.photos/seed/student3/100/100',
-    role: 'student',
+    role: 'apprenant',
     skills: ['Project Management', 'Agile Methodologies', 'Jira', 'Risk Assessment']
   },
   administrator: {
-    id: 6,
+    id: 7,
     name: "Ndèye Coumba",
-    email: "ndeye.coumba@senegelworkflow.org",
+    email: "ndeye.coumba@senegel.org",
     avatar: "https://picsum.photos/seed/staff/100/100",
     role: 'administrator',
     skills: ["Project Coordination", "Volunteer Management", "Training Facilitation", "Mentorship"],
   },
   manager: {
-    id: 7,
+    id: 8,
     name: "Daouda Sow",
-    email: "daouda.sow@senegelworkflow.org",
+    email: "daouda.sow@senegel.org",
     avatar: "https://picsum.photos/seed/manager/100/100",
     role: 'manager',
     skills: ["Team Leadership", "Budgeting", "Product Management"],
@@ -202,10 +210,10 @@ export const mockProjects: Project[] = [
         description: "Develop and execute a comprehensive marketing campaign for the new product line. The campaign should target young professionals and students.",
         status: "In Progress",
         dueDate: "2024-12-31",
-        team: [mockUsers.student, mockUsers.super_administrator, mockUsers.student2],
+        team: [mockUsers.apprenant, mockUsers.super_administrator, mockUsers.student2],
         tasks: [
             { id: 't1', text: "Finalize key messaging and value proposition", status: 'Done', priority: 'High', assignee: mockUsers.super_administrator, estimatedTime: 8, loggedTime: 6, dueDate: '2024-10-15' },
-            { id: 't2', text: "Develop social media content calendar", status: 'Done', priority: 'High', assignee: mockUsers.student, estimatedTime: 12, loggedTime: 15, dueDate: '2024-10-20' },
+            { id: 't2', text: "Develop social media content calendar", status: 'Done', priority: 'High', assignee: mockUsers.apprenant, estimatedTime: 12, loggedTime: 15, dueDate: '2024-10-20' },
             { id: 't3', text: "Create video testimonials with beta users", status: 'In Progress', priority: 'Medium', assignee: mockUsers.student2, estimatedTime: 16, loggedTime: 4.5, dueDate: '2024-11-05' },
             { id: 't4', text: "Organize launch webinar", status: 'To Do', priority: 'High', estimatedTime: 40, dueDate: '2024-12-01' },
         ],
@@ -227,7 +235,7 @@ export const mockProjects: Project[] = [
         description: "Design, develop, and deploy an AI-powered chatbot to assist customers with common questions about products, orders, and platform navigation.",
         status: "Completed",
         dueDate: "2024-06-01",
-        team: [mockUsers.student, mockUsers.super_administrator],
+        team: [mockUsers.apprenant, mockUsers.super_administrator],
         tasks: [
              { id: 't1-p3', text: "Gather FAQ data", status: 'Done', priority: 'High', estimatedTime: 10, loggedTime: 10 },
              { id: 't2-p3', text: "Select NLP service", status: 'Done', priority: 'High', estimatedTime: 20, loggedTime: 18 },
@@ -297,7 +305,7 @@ export const mockTimeLogs: TimeLog[] = [
 ];
 
 export const mockLeaveRequests: LeaveRequest[] = [
-    { id: 1, userId: 1, userName: "Amina Diop", userAvatar: mockUsers.student.avatar, startDate: "2024-10-20", endDate: "2024-10-25", reason: "Family vacation.", status: "Approved" },
+    { id: 1, userId: 3, userName: "Amina Diop", userAvatar: mockUsers.apprenant.avatar, startDate: "2024-10-20", endDate: "2024-10-25", reason: "Family vacation.", status: "Approved" },
     { id: 2, userId: 4, userName: "Binta Fall", userAvatar: mockUsers.student2.avatar, startDate: nextWeek.toISOString().split('T')[0], endDate: dayAfter.toISOString().split('T')[0], reason: "Personal days.", status: "Pending" },
     { id: 3, userId: 5, userName: "Cheikh Sarr", userAvatar: mockUsers.student3.avatar, startDate: "2024-09-15", endDate: "2024-09-15", reason: "Medical appointment.", status: "Rejected" },
 ];
@@ -384,7 +392,7 @@ export const mockMeetings: Meeting[] = [
         title: 'Q4 Campaign Kick-off',
         startTime: getTodayAtTime(10),
         endTime: getTodayAtTime(11),
-        attendees: [mockUsers.student, mockUsers.super_administrator, mockUsers.student2],
+        attendees: [mockUsers.apprenant, mockUsers.super_administrator, mockUsers.student2],
         organizerId: mockUsers.super_administrator.id,
         description: 'Initial planning session for the Q4 marketing campaign.'
     },
